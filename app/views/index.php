@@ -1,15 +1,23 @@
 <?php
+require_once "../../vendor/autoload.php";
 session_start();
 
 use models\addPassword;
+use models\listPasswords;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $url = $_POST['url'];
     $login = $_POST['login'];
     $password = $_POST['password'];
-    $user = new addPassword($login, $password);
+
+    $user = new addPassword($url, $password, $login);
     $user->add();
+    unset($_POST);
 }
 
+$listPasswords = new listPasswords();
+$listPasswords->getListPasswords();
+$list = $listPasswords->getList();
 ?>
 
 <!doctype html>
@@ -23,20 +31,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h1>Hello, <?=htmlspecialchars($_SESSION['user']['login'])?></h1>
-    <form action="../models/addPassword.php" method="post">
+    <form action="" method="post">
         <h2>Add password</h2>
-        <input type="text" placeholder="Login" name="login">
-        <input type="email" placeholder="Email" name="email">
+        <input type="text" placeholder="Link of website" name="url">
+        <input type="email" placeholder="Login" name="login">
         <input type="password" placeholder="Password" name="password">
         <button type="submit">Add</button>
     </form>
     <table>
         <tr>
+            <th>URL</th>
             <th>login</th>
-            <th>email</th>
             <th>password</th>
         </tr>
-
+        <?php foreach ($list as $password): ?>
+        <tr>
+            <td><?=htmlspecialchars($password['url'])?></td>
+            <td><?=htmlspecialchars($password['login'])?></td>
+            <td><?=htmlspecialchars($password['password'])?></td>
+        </tr>
+        <?php endforeach; ?>
     </table>
 </body>
 </html>

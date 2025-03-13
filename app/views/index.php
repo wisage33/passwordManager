@@ -4,6 +4,7 @@ session_start();
 
 use models\addPassword;
 use models\listPasswords;
+use models\OpenSSL;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $url = $_POST['url'];
@@ -18,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $listPasswords = new listPasswords();
 $listPasswords->getListPasswords();
 $list = $listPasswords->getList();
+$openSSL = new OpenSSL();
 ?>
 
 <!doctype html>
@@ -44,11 +46,11 @@ $list = $listPasswords->getList();
             <th>login</th>
             <th>password</th>
         </tr>
-        <?php foreach ($list as $password): ?>
+        <?php foreach ($list as $row): ?>
         <tr>
-            <td><?=htmlspecialchars($password['url'])?></td>
-            <td><?=htmlspecialchars($password['login'])?></td>
-            <td><?=htmlspecialchars($password['password'])?></td>
+            <td><?=htmlspecialchars($row['url'])?></td>
+            <td><?=htmlspecialchars($row['login'])?></td>
+            <td><?=htmlspecialchars($openSSL->decrypt($row['password']))?></td>
         </tr>
         <?php endforeach; ?>
     </table>

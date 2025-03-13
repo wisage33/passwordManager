@@ -6,5 +6,5 @@ return [
       'pass' => '',
       'db' => 'passwordManager'
   ],
-    'key' => ''
+    'key' => 'your-secure-encryption-key-32-characters-long'
 ];

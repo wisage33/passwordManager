@@ -18,10 +18,11 @@ class OpenSSL
         return base64_encode($iv . $encrypted);
     }
     public function decrypt($encryptedPassword) {
-        $password = base64_decode($encryptedPassword);
+        $data = base64_decode($encryptedPassword);
         $ivlen = openssl_cipher_iv_length($this->cipher);
-        $iv = substr($password, 0, $ivlen);
-        $encryptedPassword = substr($password, $ivlen);
-        return openssl_decrypt($encryptedPassword, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv);
+        $iv = substr($data, 0, $ivlen);
+        $encryptedPassword = substr($data, $ivlen);
+        $decrypted = openssl_decrypt($encryptedPassword, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv);
+        return $decrypted;
     }
 }

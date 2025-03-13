@@ -1,12 +1,15 @@
 <?php
 
 namespace models;
+
+use models\OpenSSL;
 class addPassword
 {
     private $url;
     private $login;
     private $password;
     private $db;
+    private $openssl;
     public function __construct($url, $password, $login = null)
     {
         $this->url = $url;
@@ -14,6 +17,7 @@ class addPassword
         $this->password = $password;
         $config = require "../../config/config.php";
         $this->db = new DataBase($config['db']);
+        $this->openssl = new OpenSSL();
     }
     public function add()
     {
@@ -25,7 +29,7 @@ class addPassword
             'user_id' => $_SESSION['user']['id'],
             "url" => $this->url,
             "login" => $this->login,
-            "password" => password_hash($this->password, PASSWORD_DEFAULT)
+            "password" => $this->openssl->encrypt($this->password)
         ]);
         echo "<script>console.log('Password added');</script>";
         header("Location:". $_SERVER['PHP_SELF']);

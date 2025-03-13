@@ -3,6 +3,7 @@ require_once "../../vendor/autoload.php";
 session_start();
 
 use models\addPassword;
+use models\listPasswords;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $url = $_POST['url'];
@@ -14,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     unset($_POST);
 }
 
+$listPasswords = new listPasswords();
+$listPasswords->getListPasswords();
+$list = $listPasswords->getList();
 ?>
 
 <!doctype html>
@@ -36,11 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
     <table>
         <tr>
+            <th>URL</th>
             <th>login</th>
-            <th>email</th>
             <th>password</th>
         </tr>
-        <?php ?>
+        <?php foreach ($list as $password): ?>
+        <tr>
+            <td><?=htmlspecialchars($password['url'])?></td>
+            <td><?=htmlspecialchars($password['login'])?></td>
+            <td><?=htmlspecialchars($password['password'])?></td>
+        </tr>
+        <?php endforeach; ?>
     </table>
 </body>
 </html>

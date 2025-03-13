@@ -5,5 +5,6 @@ return [
       'user' => 'root',
       'pass' => '',
       'db' => 'passwordManager'
-  ]
+  ],
+    'key' => ''
 ];
